@@ -1,0 +1,12 @@
+*INCA_libs
+*csrc
+*.log
+*.diff
+*.gz
+log
+simv
+simv.daidir
+simv.cst
+transcript
+ucli.key
+work
