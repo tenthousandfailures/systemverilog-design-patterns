@@ -12,33 +12,62 @@ class Fields_V3 extends Fields;
 endclass
 
 interface class PackBehavior#(type F = Fields);
-   pure virtual function logic [11:0] pack(F f);
+   pure virtual function logic [13:0] pack(F f);
+   pure virtual function F unpack(logic [13:0] raw);
 endclass
 
-interface class UnpackBehavior#(type F = Fields);
-   pure virtual function F unpack(logic [11:0] raw);
+interface class CheckBehavior;
+   pure virtual function logic [13:0] pack(logic [13:0] raw);
+   pure virtual function bit unpack(logic [13:0] raw);
 endclass
+
+class Parity implements CheckBehavior;
+   virtual         function logic [13:0] pack(logic [13:0] raw);
+      logic [13:0] a;
+      a[13:12]  = 2'b00;
+      a[11:0]  = raw[11:0];
+      return a;
+   endfunction
+
+   virtual         function bit unpack(logic [13:0] raw);
+      return 1;
+   endfunction
+endclass
+
+class Crc implements CheckBehavior;
+   virtual         function logic [13:0] pack(logic [13:0] raw);
+      logic [13:0] a;
+      a[13:12]  = 2'b10;
+      a[11:0]  = raw[11:0];
+      return a;
+   endfunction
+
+   virtual         function bit unpack(logic [13:0] raw);
+      return 1;
+   endfunction
+endclass
+
 
 class base_packet#(
                    type TPackBehavior = PackBehavior,
-                   type TUnpackBehavior = UnpackBehavior,
                    type F = Fields
                    );
 
    rand F fields;
    TPackBehavior packBehavior;
-   TUnpackBehavior unpackBehavior;
+   CheckBehavior checkBehavior;
 
    function new();
       fields  = new;
    endfunction
 
-   function void performUnpack(logic [11:0] raw);
-      fields = unpackBehavior.unpack(raw);
+   function bit performUnpack(logic [13:0] raw);
+      fields  = packBehavior.unpack(raw);
+      return checkBehavior.unpack(raw);
    endfunction
 
-   function logic [11:0] performPack();
-      return packBehavior.pack(fields);
+   function logic [13:0] performPack();
+      return checkBehavior.pack((packBehavior.pack(fields)));
    endfunction
 
    function void print();
@@ -49,26 +78,24 @@ class base_packet#(
       packBehavior = pb;
    endfunction
 
-   function void setUnpackBehavior(TUnpackBehavior ub);
-      unpackBehavior = ub;
+   function void setCheckBehavior(CheckBehavior cb);
+      checkBehavior = cb;
    endfunction
 
 endclass
 
 class v1_pack implements PackBehavior;
-   virtual     function logic [11:0] pack(Fields f);
-      logic [11:0] a;
-      a[11]    = f.reserved;
-      a[10:7]  = f.addr;
-      a[6:3]   = f.data;
-      a[2:0]   = f.cmd;
+   virtual     function logic [13:0] pack(Fields f);
+      logic [13:0] a;
+      a[13:12]  = 2'bxx;
+      a[11]     = f.reserved;
+      a[10:7]   = f.addr;
+      a[6:3]    = f.data;
+      a[2:0]    = f.cmd;
       return a;
    endfunction
-endclass
 
-class v1_unpack implements UnpackBehavior;
-
-   virtual     function Fields unpack(logic [11:0] raw);
+   virtual         function Fields unpack(logic [13:0] raw);
       Fields fields    = new;
       fields.reserved  = raw[11];
       fields.addr      = raw[10:7];
@@ -83,59 +110,56 @@ class v1_packet extends base_packet;
 
    function new();
       v1_pack p = new();
-      v1_unpack u = new();
+      Crc c   = new();
+
       setPackBehavior(p);
-      setUnpackBehavior(u);
+      setCheckBehavior(c);
    endfunction
 endclass
 
 class v2_pack implements PackBehavior;
-   virtual     function logic [11:0] pack(Fields f);
-      logic [11:0] a;
+   virtual     function logic [13:0] pack(Fields f);
+      logic [13:0] a;
       a[11]    = f.reserved;
       a[10:7]  = f.data;
       a[6:3]   = f.addr;
       a[2:0]   = f.cmd;
       return a;
    endfunction
-endclass
 
-class v2_unpack implements UnpackBehavior;
-
-   virtual         function Fields unpack(logic [11:0] raw);
+   virtual         function Fields unpack(logic [13:0] raw);
       Fields fields    = new;
       fields.reserved  = raw[11];
       fields.data      = raw[10:7];
       fields.addr      = raw[6:3];
       fields.cmd       = raw[2:0];
       return fields;
-
    endfunction
+
 endclass
 
 class v2_packet extends base_packet;
 
    function new();
       v2_pack p = new();
-      v2_unpack u = new();
+      Parity c   = new();
+
       setPackBehavior(p);
-      setUnpackBehavior(u);
+      setCheckBehavior(c);
    endfunction
 endclass
 
 class v3_pack implements PackBehavior#(.F(Fields_V3));
-   virtual         function logic [11:0] pack(Fields_V3 f);
-      logic [11:0] a;
+   virtual         function logic [13:0] pack(Fields_V3 f);
+      logic [13:0] a;
+      a[13:12]  = 2'bxx;
       a[11:8]  = f.data;
       a[7:3]   = f.addr;
       a[2:0]   = f.cmd;
       return a;
    endfunction
-endclass
 
-class v3_unpack implements UnpackBehavior#(.F(Fields_V3));
-
-   virtual         function Fields_V3 unpack(logic [11:0] raw);
+   virtual         function Fields_V3 unpack(logic [13:0] raw);
       Fields_V3 fields = new;
 
       fields.data  = raw[11:8];
@@ -144,19 +168,19 @@ class v3_unpack implements UnpackBehavior#(.F(Fields_V3));
       return fields;
 
    endfunction
+
 endclass
 
 class v3_packet extends base_packet#(
                                      .TPackBehavior(PackBehavior#(.F(Fields_V3))),
-                                     .TUnpackBehavior(UnpackBehavior#(.F(Fields_V3))),
                                      .F(Fields_V3)
                                      );
 
    function new();
-      v3_pack p = new();
-      v3_unpack u = new();
+      v3_pack p  = new();
+      Crc c   = new();
       setPackBehavior(p);
-      setUnpackBehavior(u);
+      setCheckBehavior(c);
    endfunction
 endclass
 
@@ -176,7 +200,7 @@ module top;
 
       $display("");
       $display("STARTING V1");
-      v1p.performUnpack(12'b0_0101_1111_010);
+      void'(v1p.performUnpack(14'b00_0_0101_1111_010));
       v1p.print();
       v1p.fields.addr  = 0;
       v1p.print();
@@ -187,7 +211,7 @@ module top;
 
       $display("");
       $display("STARTING V2");
-      v2p.performUnpack(12'b0_0101_1111_010);
+      void'(v2p.performUnpack(14'b00_0_0101_1111_010));
       v2p.print();
       v2p.fields.addr  = 0;
       v2p.print();
@@ -195,7 +219,7 @@ module top;
 
       $display("");
       $display("STARTING V3");
-      v3p.performUnpack(12'b1111_11111_110);
+      void'(v3p.performUnpack(14'b00_1111_11111_110));
       v3p.print();
       v3p.fields.addr  = 0;
       v3p.print();
