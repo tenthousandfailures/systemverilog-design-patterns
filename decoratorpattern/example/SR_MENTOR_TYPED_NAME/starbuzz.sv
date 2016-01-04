@@ -43,12 +43,12 @@ module top;
       str.realtoa(beverage.cost());
 		  $display({beverage.getDescription(), " $", str});
 
-      beverage   = DarkRoast::new;
-      beverage   = Mocha::new(beverage);
-      beverage   = Mocha::new(beverage);
-      beverage   = Whip::new(beverage);
-      str.realtoa(beverage.cost());
-		  $display({beverage.getDescription(), " $", str});
+      beverage2   = DarkRoast::new;
+      beverage2   = Mocha::new(beverage2);
+      beverage2   = Mocha::new(beverage2);
+      beverage2   = Whip::new(beverage2);
+      str.realtoa(beverage2.cost());
+		  $display({beverage2.getDescription(), " $", str});
 
       beverage  = HouseBlend::new;
       beverage  = Soy::new(beverage);
