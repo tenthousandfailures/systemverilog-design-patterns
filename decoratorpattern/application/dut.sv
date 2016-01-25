@@ -51,7 +51,6 @@ class addr_prohibit extends addr_txnDecorator;
 
    constraint c_addr_prohibit {
       !(addr inside {['h00000000 : 'h00000FFF - txn.size]});
-      !(addr inside {['h00000000 : 'h00000FFF]});
 
       // debug constraint very strict
       // !(addr inside {['h00000000 : 'h1FFFFFF0 - txn.size]});
