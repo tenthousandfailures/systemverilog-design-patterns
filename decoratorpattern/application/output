@@ -1,0 +1,7 @@
+RUNNING COMPATIBILITY
+addr_txn randomization
+  addr=74d000c5 size=1
+addr_txn randomization with addr_prohibit added
+  addr=15a0f1dd size=4
+addr_txn randomization with addr_prohibit and addr_permit added
+  addr=11cc212e size=1

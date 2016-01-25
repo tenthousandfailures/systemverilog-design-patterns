@@ -30,9 +30,11 @@ class addr_permit extends addr_txnDecorator;
    endfunction
 
    constraint c_addr_permit {
-      // addr inside {['h00000000 : 'h0000FFFF - size]} ||
-      // addr inside {['h10000000 : 'h1FFFFFFF - size]};
-      addr inside {['h0 : 'hF]};
+      addr inside {['h00000000 : 'h0000FFFF - txn.size]} ||
+      addr inside {['h10000000 : 'h1FFFFFFF - txn.size]};
+
+      // for debug
+      // addr inside {['h0 : 'hF]};
    }
    constraint addr_permit_c {
       txn.addr == addr;
@@ -48,9 +50,14 @@ class addr_prohibit extends addr_txnDecorator;
    endfunction
 
    constraint c_addr_prohibit {
-      addr inside {['hF : 'hFF]};
-      // !(addr inside {['h0 : 'h5]});
-      // !(addr inside {['h00000000 : 'h00000FFF - size]});
+      !(addr inside {['h00000000 : 'h00000FFF - txn.size]});
+      !(addr inside {['h00000000 : 'h00000FFF]});
+
+      // debug constraint very strict
+      // !(addr inside {['h00000000 : 'h1FFFFFF0 - txn.size]});
+
+      // for debug
+      // !(addr inside {['hF : 'hFF]});
    }
    constraint addr_prohibit_c {
       txn.addr == addr;
@@ -71,10 +78,15 @@ module top;
 
 `ifdef PREFERRED
 
-      // TODO why is virtual not working or are we killing it?
       $display("RUNNING PREFERRED");
+
+      $display("addr_txn randomization");
       txn       = layer::addr_txn::new; txn.rprint();
+
+      $display("addr_txn randomization with addr_prohibit added");
       txn       = layer::addr_prohibit::new(txn); txn.rprint();
+
+      $display("addr_txn randomization with addr_prohibit and addr_permit added");
       txn       = layer::addr_permit::new(txn); txn.rprint();
 
       // DOES NOT WORK NOT SURE IF IT SHOULD ANYWAYS
@@ -89,13 +101,16 @@ module top;
       // the below is functionally equivalent to the above
       $display("RUNNING COMPATIBILITY");
 
+      $display("addr_txn randomization");
       txn       = new;
       txn.rprint();
 
+      $display("addr_txn randomization with addr_prohibit added");
       addr_permit  = new(txn);
       txn          = new addr_permit;
       txn.rprint();
 
+      $display("addr_txn randomization with addr_prohibit and addr_permit added");
       addr_prohibit  = new(txn);
       txn            = new addr_prohibit;
       txn.rprint();

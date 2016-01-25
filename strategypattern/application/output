@@ -1,0 +1,16 @@
+RUNNING PREFERRED
+
+STARTING V1
+  unpacked addr=0101 data=1111 cmd=010
+  unpacked addr=0000 data=1111 cmd=010
+  packed=10000001111010
+
+STARTING V2
+  unpacked addr=1111 data=0101 cmd=010
+  unpacked addr=0000 data=0101 cmd=010
+  packed=00001010000010
+
+STARTING V3
+  unpacked addr=11111 data=1111 cmd=110
+  unpacked addr=00000 data=1111 cmd=110
+  packed=10111100000110
