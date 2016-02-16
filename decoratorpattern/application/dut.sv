@@ -1,7 +1,5 @@
 package layer;
 
-   typedef enum {READ, WRITE} rw_t;
-
 class addr_txn;
    rand bit [31:0] addr;
    rand int size;
@@ -33,11 +31,11 @@ class addr_permit extends addr_txnDecorator;
       addr inside {['h00000000 : 'h0000FFFF - txn.size]} ||
       addr inside {['h10000000 : 'h1FFFFFFF - txn.size]};
 
+      txn.addr == addr;
+      txn.size == size;
+
       // for debug
       // addr inside {['h0 : 'hF]};
-   }
-   constraint addr_permit_c {
-      txn.addr == addr;
    }
 
 endclass
@@ -52,14 +50,16 @@ class addr_prohibit extends addr_txnDecorator;
    constraint c_addr_prohibit {
       !(addr inside {['h00000000 : 'h00000FFF - txn.size]});
 
+      txn.addr == addr;
+      txn.size == size;
+
+      // size == 4;
+
       // debug constraint very strict
       // !(addr inside {['h00000000 : 'h1FFFFFF0 - txn.size]});
 
       // for debug
       // !(addr inside {['hF : 'hFF]});
-   }
-   constraint addr_prohibit_c {
-      txn.addr == addr;
    }
 endclass
 
@@ -82,11 +82,11 @@ module top;
       $display("addr_txn randomization");
       txn       = layer::addr_txn::new; txn.rprint();
 
-      $display("addr_txn randomization with addr_prohibit added");
-      txn       = layer::addr_prohibit::new(txn); txn.rprint();
+      $display("addr_txn randomization with addr_permit added");
+      txn       = layer::addr_permit::new(txn); txn.rprint();
 
       $display("addr_txn randomization with addr_prohibit and addr_permit added");
-      txn       = layer::addr_permit::new(txn); txn.rprint();
+      txn       = layer::addr_prohibit::new(txn); txn.rprint();
 
       // DOES NOT WORK NOT SURE IF IT SHOULD ANYWAYS
       // $display("ALTERNATIVE");
@@ -104,7 +104,7 @@ module top;
       txn       = new;
       txn.rprint();
 
-      $display("addr_txn randomization with addr_prohibit added");
+      $display("addr_txn randomization with addr_permit added");
       addr_permit  = new(txn);
       txn          = new addr_permit;
       txn.rprint();
