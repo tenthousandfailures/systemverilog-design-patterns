@@ -1,16 +1,16 @@
 class Milk extends CondimentDecorator;
 
-	 Beverage beverage;
+   Beverage beverage;
 
-	 function new(Beverage beverage);
+   function new(Beverage beverage);
       this.beverage = beverage;
-	 endfunction
+   endfunction
 
-	 virtual function string getDescription();
+   virtual function string getDescription();
       return {beverage.getDescription(), ", Milk"};
    endfunction
 
-	 virtual function real cost();
+   virtual function real cost();
       return (0.10 + beverage.cost());
    endfunction
 

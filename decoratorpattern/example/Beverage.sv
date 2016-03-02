@@ -1,11 +1,11 @@
 virtual class Beverage;
    string description = "Unknown Beverage";
 
-	 virtual function string getDescription();
+   virtual function string getDescription();
       return description;
    endfunction
 
-	 virtual function real cost();
+   virtual function real cost();
    endfunction
 
 endclass

@@ -17,8 +17,8 @@ class addr_txn;
 
 endclass
 
-virtual class addr_txnDecorator extends addr_txn;
-endclass
+   virtual class addr_txnDecorator extends addr_txn;
+   endclass
 
 class addr_permit extends addr_txnDecorator;
    rand addr_txn txn;
@@ -29,7 +29,7 @@ class addr_permit extends addr_txnDecorator;
 
    constraint c_addr_permit {
       addr inside {['h00000000 : 'h0000FFFF - txn.size]} ||
-      addr inside {['h10000000 : 'h1FFFFFFF - txn.size]};
+     addr inside {['h10000000 : 'h1FFFFFFF - txn.size]};
 
       txn.addr == addr;
       txn.size == size;

@@ -1,12 +1,12 @@
 class Espresso extends Beverage;
 
-	 function new();
+   function new();
       description = "Espresso";
-	 endfunction
+   endfunction
 
-	 virtual function real cost();
+   virtual function real cost();
       return 1.99;
-	 endfunction
+   endfunction
 
 endclass
 

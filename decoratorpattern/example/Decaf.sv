@@ -1,11 +1,11 @@
 class Decaf extends Beverage;
 
-	 function new();
+   function new();
       description = "Decaf Coffee";
-	 endfunction
+   endfunction
 
-	 virtual function real cost();
-		  return 1.05;
-	 endfunction
+   virtual function real cost();
+      return 1.05;
+   endfunction
 
 endclass

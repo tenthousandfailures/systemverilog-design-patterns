@@ -1,5 +1,5 @@
 package classic;
-// NOTE: This is not thread safe!
+   // NOTE: This is not thread safe!
 
 class Singleton;
    local static Singleton uniqueInstance;

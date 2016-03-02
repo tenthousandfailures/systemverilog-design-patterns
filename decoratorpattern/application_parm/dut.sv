@@ -29,8 +29,8 @@ class rw_txn extends addr_txn;
 
 endclass
 
-virtual class addr_txnDecorator#(type P = addr_txn) extends P;
-endclass
+   virtual class addr_txnDecorator#(type P = addr_txn) extends P;
+   endclass
 
 class addr_permit#(type P = addr_txnDecorator, type T = addr_txn) extends P;
    rand T txn;
@@ -126,11 +126,11 @@ module top;
 
       rwtxn       = new;
       rwtxn.rprint();
-      
+
       addr_permit_rw_txn  = new(rwtxn);
       rwtxn          = new addr_permit_rw_txn;
       rwtxn.rprint();
-      
+
       addr_prohibit_rw_txn  = new(rwtxn);
       rwtxn            = new addr_prohibit_rw_txn;
       rwtxn.rprint();
