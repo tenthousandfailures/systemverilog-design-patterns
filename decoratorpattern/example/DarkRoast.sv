@@ -1,12 +1,12 @@
 class DarkRoast extends Beverage;
-   
-	 function new();
+
+   function new();
       description = "Dark Roast Coffee";
-	 endfunction
- 
-	 virtual function real cost();
+   endfunction
+
+   virtual function real cost();
       return 0.99;
-	 endfunction
+   endfunction
 
 endclass
 

@@ -1,24 +1,24 @@
 class GumballMachine;
 
    // TODO THIS IS NOT NEEDED WITH ::new syntax
-	 SoldOutState sOS;
-	 NoQuarterState nQS;
-	 HasQuarterState hQS;
-	 SoldState sS;
-	 WinnerState wS;
+   SoldOutState sOS;
+   NoQuarterState nQS;
+   HasQuarterState hQS;
+   SoldState sS;
+   WinnerState wS;
 
-	 State soldOutState;
+   State soldOutState;
    State noQuarterState;
-	 State hasQuarterState;
-	 State soldState;
-	 State winnerState;
+   State hasQuarterState;
+   State soldState;
+   State winnerState;
 
-	 // State state = soldOutState;
-	 State state;
+   // State state = soldOutState;
+   State state;
 
    int count = 0;
 
-	 function new(int numberGumballs);
+   function new(int numberGumballs);
       // Error-[SV-IIOIC] Illegal instantiation of interface class
       // GumballMachine.sv, 15
       // gumballstatewinner, "this.soldOutState = new();"
@@ -36,52 +36,52 @@ class GumballMachine;
       hQS              = new(this);
       sS               = new(this);
       wS               = new(this);
-      
-      soldOutState     = sOS;
-		  noQuarterState   = nQS;
-		  hasQuarterState  = hQS;
-		  soldState        = sS;
-		  winnerState      = wS;
 
-		  this.count       = numberGumballs;
- 		  if (numberGumballs > 0) begin
-			   state = noQuarterState;
-		  end
+      soldOutState     = sOS;
+      noQuarterState   = nQS;
+      hasQuarterState  = hQS;
+      soldState        = sS;
+      winnerState      = wS;
+
+      this.count       = numberGumballs;
+      if (numberGumballs > 0) begin
+         state = noQuarterState;
+      end
    endfunction
 
    function void insertQuarter();
-		  state.insertQuarter();
-	 endfunction
+      state.insertQuarter();
+   endfunction
 
-	 function void ejectQuarter();
-		  state.ejectQuarter();
-	 endfunction
+   function void ejectQuarter();
+      state.ejectQuarter();
+   endfunction
 
-	 function void turnCrank();
-		  state.turnCrank();
-		  state.dispense();
-	 endfunction
+   function void turnCrank();
+      state.turnCrank();
+      state.dispense();
+   endfunction
 
-	 function void setState(State state);
-		  this.state = state;
-	 endfunction
+   function void setState(State state);
+      this.state = state;
+   endfunction
 
- 	 function void releaseBall();
-		  $display("A gumball comes rolling out the slot...");
-		  if (count != 0) begin
-			   count  = count - 1;
+   function void releaseBall();
+      $display("A gumball comes rolling out the slot...");
+      if (count != 0) begin
+         count  = count - 1;
       end
-	 endfunction
+   endfunction
 
-	 function int getCount();
-		  return count;
-	 endfunction
+   function int getCount();
+      return count;
+   endfunction
 
-	 function void refill(int count);
-		  this.count += count;
-		  $display("The gumball machine was just refilled; it's new count is: %d", this.count);
-		  state.refill();
-	 endfunction
+   function void refill(int count);
+      this.count += count;
+      $display("The gumball machine was just refilled; it's new count is: %d", this.count);
+      state.refill();
+   endfunction
 
    function State getState();
       return state;
@@ -107,20 +107,20 @@ class GumballMachine;
       return winnerState;
    endfunction
 
-	 function string toString();
-		  string result  = "";
+   function string toString();
+      string result  = "";
       string t;
 
-		  result         = {result, "\nMighty Gumball, Inc."};
-		  result         = {result, "\nJava-enabled Standing Gumball Model #2004"};
-		  t.itoa(count);
+      result         = {result, "\nMighty Gumball, Inc."};
+      result         = {result, "\nJava-enabled Standing Gumball Model #2004"};
+      t.itoa(count);
       result         = {result, "\nInventory: ", t, " gumball"};
-		  if (count != 1) begin
-			   result = {result, "s"};
-		  end
-		  result  = {result, "\n"};
+      if (count != 1) begin
+         result = {result, "s"};
+      end
+      result  = {result, "\n"};
       t       = state.toString();
-		  result  = {result, "Machine is ", t, "\n"};
-		  return result;
-	 endfunction
+      result  = {result, "Machine is ", t, "\n"};
+      return result;
+   endfunction
 endclass

@@ -6,12 +6,12 @@ class Mocha extends CondimentDecorator;
       this.beverage = beverage;
    endfunction
 
-	 virtual function string getDescription();
+   virtual function string getDescription();
       return {beverage.getDescription(), ", Mocha"};
-	 endfunction
+   endfunction
 
-	 virtual function real cost();
-		  return (0.20 + beverage.cost());
-	 endfunction
+   virtual function real cost();
+      return (0.20 + beverage.cost());
+   endfunction
 
 endclass

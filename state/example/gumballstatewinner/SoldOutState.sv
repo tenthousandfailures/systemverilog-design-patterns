@@ -6,26 +6,26 @@ class SoldOutState implements State;
    endfunction
 
    virtual function void insertQuarter();
-		  $display("You can't insert a quarter, the machine is sold out");
+      $display("You can't insert a quarter, the machine is sold out");
    endfunction
 
    virtual function void ejectQuarter();
       $display("You can't eject, you haven't inserted a quarter yet");
-	 endfunction
+   endfunction
 
    virtual function void turnCrank();
-		  $display("You turned, but there are no gumballs");
-	 endfunction
+      $display("You turned, but there are no gumballs");
+   endfunction
 
    virtual function void dispense();
-		  $display("No gumball dispensed");
+      $display("No gumball dispensed");
    endfunction
 
    virtual function void refill();
-		  gumballMachine.setState(gumballMachine.getNoQuarterState());
-	 endfunction
+      gumballMachine.setState(gumballMachine.getNoQuarterState());
+   endfunction
 
    virtual function string toString();
-		  return "sold out";
-	 endfunction
+      return "sold out";
+   endfunction
 endclass

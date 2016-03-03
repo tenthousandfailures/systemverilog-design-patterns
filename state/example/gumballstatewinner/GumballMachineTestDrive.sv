@@ -1,10 +1,10 @@
 package gumballstatewinner;
-	 // TODO had to declare these classes early
+   // TODO had to declare these classes early
    typedef class SoldOutState;
-	 typedef class NoQuarterState;
+   typedef class NoQuarterState;
    typedef class HasQuarterState;
-	 typedef class SoldState;
-	 typedef class WinnerState;
+   typedef class SoldState;
+   typedef class WinnerState;
 
 `include "State.sv"
 `include "GumballMachine.sv"
@@ -23,40 +23,40 @@ module top;
    initial begin
       $display("HELLO");
 
-		  gumballMachine = new(10);
+      gumballMachine = new(10);
 
-		  $display(gumballMachine.toString());
+      $display(gumballMachine.toString());
 
-		  gumballMachine.insertQuarter();
-		  gumballMachine.turnCrank();
-		  gumballMachine.insertQuarter();
-		  gumballMachine.turnCrank();
+      gumballMachine.insertQuarter();
+      gumballMachine.turnCrank();
+      gumballMachine.insertQuarter();
+      gumballMachine.turnCrank();
 
-		  $display(gumballMachine.toString());
-		  gumballMachine.insertQuarter();
-		  gumballMachine.turnCrank();
-		  gumballMachine.insertQuarter();
-		  gumballMachine.turnCrank();
+      $display(gumballMachine.toString());
+      gumballMachine.insertQuarter();
+      gumballMachine.turnCrank();
+      gumballMachine.insertQuarter();
+      gumballMachine.turnCrank();
 
-		  $display(gumballMachine.toString());
-		  gumballMachine.insertQuarter();
-		  gumballMachine.turnCrank();
-		  gumballMachine.insertQuarter();
-		  gumballMachine.turnCrank();
+      $display(gumballMachine.toString());
+      gumballMachine.insertQuarter();
+      gumballMachine.turnCrank();
+      gumballMachine.insertQuarter();
+      gumballMachine.turnCrank();
 
-		  $display(gumballMachine.toString());
-		  gumballMachine.insertQuarter();
-		  gumballMachine.turnCrank();
-		  gumballMachine.insertQuarter();
-		  gumballMachine.turnCrank();
+      $display(gumballMachine.toString());
+      gumballMachine.insertQuarter();
+      gumballMachine.turnCrank();
+      gumballMachine.insertQuarter();
+      gumballMachine.turnCrank();
 
-		  $display(gumballMachine.toString());
-		  gumballMachine.insertQuarter();
-		  gumballMachine.turnCrank();
-		  gumballMachine.insertQuarter();
-		  gumballMachine.turnCrank();
+      $display(gumballMachine.toString());
+      gumballMachine.insertQuarter();
+      gumballMachine.turnCrank();
+      gumballMachine.insertQuarter();
+      gumballMachine.turnCrank();
 
-		  $display(gumballMachine.toString());
+      $display(gumballMachine.toString());
 
       #1;
       $finish();

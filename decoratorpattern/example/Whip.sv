@@ -2,16 +2,16 @@ class Whip extends CondimentDecorator;
 
    Beverage beverage;
 
-	 function new(Beverage beverage);
+   function new(Beverage beverage);
       this.beverage = beverage;
-	 endfunction
+   endfunction
 
-	 virtual function string getDescription();
+   virtual function string getDescription();
       return {beverage.getDescription(), ", Whip"};
-	 endfunction
+   endfunction
 
-	 virtual function real cost();
+   virtual function real cost();
       return (0.10 + beverage.cost());
-	 endfunction
+   endfunction
 
 endclass
